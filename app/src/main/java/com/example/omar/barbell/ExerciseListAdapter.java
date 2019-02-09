@@ -19,7 +19,7 @@ public class ExerciseListAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.exercise_list_item,null,false);
+        return LayoutInflater.from(context).inflate(R.layout.exercise_list_item,parent,false);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ExerciseListAdapter extends CursorAdapter {
         TextView exercise =view.findViewById(R.id.exercise_name);
         TextView weight = view.findViewById(R.id.exercise_weight);
         TextView reps = view.findViewById(R.id.exercise_reps);
-        TextView rpe = view.findViewById(R.id.rpe);
+        TextView rpe = view.findViewById(R.id.rpe_label);
 
         String exerciseIndex = cursor.getString(cursor.getColumnIndexOrThrow("exercise_name"));
         String weightIndex = cursor.getString(cursor.getColumnIndexOrThrow("weight"));

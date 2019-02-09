@@ -23,6 +23,7 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
     private EditText workoutTitleET;
     private EditText workoutDateET;
     private Button saveWorkoutButton;
+    private int workoutId;
     private ExerciseListAdapter adapter;
     private static final int EXISTING_WORKOUT_LOADER = 0;
 
@@ -31,9 +32,6 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_workout);
 
-        ListView list = findViewById(R.id.exercise_list);
-        adapter = new ExerciseListAdapter(this,null);
-        list.setAdapter(adapter);
         Intent intent = getIntent();
         workoutUri = intent.getData();
         if (workoutUri != null){
@@ -50,22 +48,7 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
             }
         });
 
-        FloatingActionButton addExBttn = findViewById(R.id.add_exercise_button);
-        addExBttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (workoutUri == null){
-                    saveWorkout();
-                    Intent intent = new Intent(AddWorkout.this,AddExerciseActivity.class);
-                    startActivity(intent);
-                }else {
-                    Intent intent = new Intent(AddWorkout.this,AddExerciseActivity.class);
-                    intent.setData(workoutUri);
-                    startActivity(intent);
-                }
 
-            }
-        });
     }
 
     private void saveWorkout() {
@@ -107,6 +90,7 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
         if (data.moveToFirst()) {
             String workoutTitileIndex = data.getString(data.getColumnIndexOrThrow("workout_title"));
             String workoutDate = data.getString(data.getColumnIndexOrThrow("workout_date"));
+
 
             workoutTitleET.setText(workoutTitileIndex);
             workoutDateET.setText(workoutDate);

@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         workoutList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, AddWorkout.class);
-                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.CONTENT_URI, id);
+                Intent intent = new Intent(MainActivity.this, ExercisesListActivity.class);
+                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, id);
                 intent.setData(uri);
                 startActivity(intent);
             }

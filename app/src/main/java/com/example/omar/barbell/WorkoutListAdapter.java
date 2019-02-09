@@ -31,8 +31,6 @@ public class WorkoutListAdapter extends CursorAdapter {
         TextView workoutTitleTextView = view.findViewById(R.id.workout_title);
         TextView workoutDateTextView = view.findViewById(R.id.workout_date);
 
-        final int position = cursor.getPosition();
-
         String workoutTitleIndex = cursor.getString(cursor.getColumnIndexOrThrow("workout_title"));
         String workoutDate = cursor.getString(cursor.getColumnIndexOrThrow("workout_date"));
 

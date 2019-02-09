@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 public class WorkoutProvider extends ContentProvider {
@@ -26,7 +27,7 @@ public class WorkoutProvider extends ContentProvider {
         uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY, WorkoutContract.PATH_WORKOUT +"/#",WORKOUT_ID );
         uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY, WorkoutContract.WorkoutEntry.TABLE_NAME_EXERCISES,EXERCISE);
         uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY,WorkoutContract.WorkoutEntry.TABLE_NAME_EXERCISES + "/#" ,EXERCISE_ID);
-        uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY,WorkoutContract.PATH_WORKOUT_EXERCISE,WORkOUT_EXERCISE);
+        uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY,WorkoutContract.WorkoutEntry.JOIN_TABLE  + "/#",WORkOUT_EXERCISE);
     }
     @Override
     public boolean onCreate() {
@@ -58,22 +59,25 @@ public class WorkoutProvider extends ContentProvider {
                 cursor = db.query(WorkoutContract.WorkoutEntry.TABLE_NAME_EXERCISES,projection,selection,selectionArgs,null,null,sortOrder);
                 break;
             case WORkOUT_EXERCISE:
-
-                final String MY_QUERY = "SELECT " + WorkoutContract.WorkoutEntry.WORKOUT_TITLE + ","
-                        + WorkoutContract.WorkoutEntry.WORKOUT_DATE + ","
-                        + WorkoutContract.WorkoutEntry.EXERCISE_NAME + ","
-                        + WorkoutContract.WorkoutEntry.WEIGHT + ","
-                        + WorkoutContract.WorkoutEntry.REPS + ","
-                        + WorkoutContract.WorkoutEntry.RPE
-                        + " FROM " + WorkoutContract.WorkoutEntry.TABLE_NAME_EXERCISES + " INNER JOIN workouts ON "
-                        +  "workouts." + WorkoutContract.WorkoutEntry._ID + " = exercises.workout_id WHERE "
-                        + WorkoutContract.WorkoutEntry.WORKOUT_ID + "=?";
-                cursor = db.rawQuery(MY_QUERY,new String[]{String.valueOf(ContentUris.parseId(uri))});
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                final String QUEREY = "SELECT workouts._id, " +
+                        "exercise_name," +
+                        "weight," +
+                        "reps," +
+                        "rpe"+
+                        " FROM "+
+                        "exercises"+
+                        " INNER JOIN workouts ON workouts._id = exercises.workout_id"+
+                        " WHERE workouts._id=?";
+                cursor = db.rawQuery(QUEREY, selectionArgs);
+                break;
 
             default:
                 throw new IllegalArgumentException("Failed to retrieve" + uri);
         }
         cursor.setNotificationUri(getContext().getContentResolver(),uri);
+        int rowcount = cursor.getCount();
+        Log.d("ROWCOUNT","Number of rows = " + String.valueOf(rowcount));
         return cursor;    }
 
     @Nullable
@@ -123,7 +127,6 @@ public class WorkoutProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri,null);
         return ContentUris.withAppendedId(uri,id);
     }
-
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {

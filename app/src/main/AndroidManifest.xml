@@ -16,12 +16,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <provider
             android:name=".WorkoutProvider"
             android:authorities="com.example.omar.barbell"
-            android:exported="false"/>
-        <activity android:name=".AddWorkout"/>
-        <activity android:name=".AddExerciseActivity"/>
+            android:exported="false" />
+
+        <activity android:name=".AddWorkout" />
+        <activity android:name=".AddExerciseActivity" />
+        <activity android:name=".ExercisesListActivity"/>
     </application>
 
 </manifest>
