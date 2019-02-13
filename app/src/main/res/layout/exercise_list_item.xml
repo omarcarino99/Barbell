@@ -9,57 +9,67 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/exercise_rpe"
-        android:layout_alignParentTop="true"
-        android:textSize="16sp"
-        android:layout_marginTop="5dp"
+        android:layout_alignTop="@+id/exercise_weight"
+        android:textSize="24sp"
+        android:paddingLeft="5dp"
         tools:text="Benchpress" />
 
     <TextView
         android:id="@+id/exercise_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/exercise_name"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="30dp"
         android:textSize="24sp"
         tools:text="365" />
+
+    <TextView
+        android:id="@+id/reps_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/exercise_reps"
+        android:layout_marginEnd="60dp"
+        android:text="Reps"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/exercise_reps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/exercise_name"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="31dp"
+        android:layout_marginTop="12dp"
+        android:textSize="20sp"
         tools:text="5" />
+
+    <TextView
+        android:id="@+id/rpe_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/reps_label"
+        android:layout_alignTop="@+id/exercise_rpe"
+        android:text="RPE"
+        android:textSize="20sp" />
+
 
     <TextView
         android:id="@+id/exercise_rpe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@+id/rpe_label"
-        android:layout_marginLeft="15dp"
+        android:layout_alignStart="@+id/exercise_reps"
+        android:layout_marginTop="47dp"
+        android:textSize="20sp"
         tools:text="8" />
-
-    <TextView
-        android:id="@+id/rpe_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/exercise_weight"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:text="RPE" />
-
-    <TextView
-        android:id="@+id/reps_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/rpe_label"
-        android:layout_below="@+id/exercise_name"
-        android:text="Reps" />
-
 </RelativeLayout>
+
+
+
+
+
+
+

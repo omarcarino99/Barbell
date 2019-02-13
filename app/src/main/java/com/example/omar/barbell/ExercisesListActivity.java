@@ -18,7 +18,8 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
     private Uri uri;
     private ExerciseListAdapter adapter;
     private FloatingActionButton addExerciseButton;
-    private int workoutIdInt;
+    private long intentValue;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +30,24 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
         ListView list = findViewById(R.id.exercise_list);
         adapter = new ExerciseListAdapter(this,null);
         list.setAdapter(adapter);
-        final Intent intent = getIntent();
+
+        intent = getIntent();
         uri = intent.getData();
+        intentValue = intent.getLongExtra("id", 0);
+
+
         addExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent exerciseInent = new Intent(ExercisesListActivity.this,AddExerciseActivity.class);
-                intent.setData(uri);
-                startActivity(exerciseInent);
+                Intent exerciseListIntent = new Intent(ExercisesListActivity.this, AddExerciseActivity.class);
+                long value = intentValue;
+                exerciseListIntent.putExtra("value", value);
+                startActivity(exerciseListIntent);
             }
         });
         getLoaderManager().initLoader(0, null, this);
     }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

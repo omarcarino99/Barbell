@@ -25,8 +25,8 @@ public class WorkoutProvider extends ContentProvider {
     static {
         uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY, WorkoutContract.PATH_WORKOUT,WORKOUT);
         uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY, WorkoutContract.PATH_WORKOUT +"/#",WORKOUT_ID );
-        uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY, WorkoutContract.WorkoutEntry.TABLE_NAME_EXERCISES,EXERCISE);
-        uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY,WorkoutContract.WorkoutEntry.TABLE_NAME_EXERCISES + "/#" ,EXERCISE_ID);
+        uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY, WorkoutContract.PATH_EXERCISE, EXERCISE);
+        uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY, WorkoutContract.PATH_EXERCISE + "/#", EXERCISE_ID);
         uriMatcher.addURI(WorkoutContract.CONTENT_AUTHORITY,WorkoutContract.WorkoutEntry.JOIN_TABLE  + "/#",WORkOUT_EXERCISE);
     }
     @Override
@@ -114,8 +114,6 @@ public class WorkoutProvider extends ContentProvider {
     }
 
     private Uri insertWorkout(Uri uri, ContentValues values) {
-        String workoutTitle = values.getAsString(WorkoutContract.WorkoutEntry.WORKOUT_TITLE);
-        String workoutDaate = values.getAsString(WorkoutContract.WorkoutEntry.WORKOUT_DATE);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         long id = db.insert(WorkoutContract.WorkoutEntry.TABLE_NAME_WORKOUT,null,values);
         if (id == -1){

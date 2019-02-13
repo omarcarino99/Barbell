@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static android.content.ContentUris.withAppendedId;
+
 public class AddExerciseActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private EditText exerciseNameET;
@@ -21,15 +23,15 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
     private EditText rpeET;
     private Button saveButton;
     private Uri uri;
-    private int workoutIdInt;
+    private long workoutId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercise);
 
-        final Intent intent = getIntent();
-        uri = intent.getData();
+        Intent intent = getIntent();
+        workoutId = intent.getLongExtra("value", 0);
 
         exerciseNameET = findViewById(R.id.exercise_name_edit_text);
         weightET = findViewById(R.id.weight);
@@ -43,7 +45,6 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
                 saveExercise();
             }
         });
-        getLoaderManager().initLoader(0, null, this);
     }
 
     private void saveExercise() {
@@ -57,11 +58,12 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
         values.put(WorkoutContract.WorkoutEntry.WEIGHT,weight);
         values.put(WorkoutContract.WorkoutEntry.REPS,reps);
         values.put(WorkoutContract.WorkoutEntry.RPE,rpe);
-        values.put(WorkoutContract.WorkoutEntry.WORKOUT_ID,workoutIdInt);
+        values.put(WorkoutContract.WorkoutEntry.WORKOUT_ID, workoutId);
 
         Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI_EXERCISE, values);
         Intent intent = new Intent(AddExerciseActivity.this,ExercisesListActivity.class);
-        intent.setData(uri);
+        Uri exerciseListUri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, workoutId);
+        intent.setData(exerciseListUri);
         startActivity(intent);
     }
 
@@ -83,9 +85,7 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.moveToFirst()){
-            workoutIdInt= data.getInt(data.getColumnIndexOrThrow(WorkoutContract.WorkoutEntry._ID));
-        }
+
     }
 
     @Override

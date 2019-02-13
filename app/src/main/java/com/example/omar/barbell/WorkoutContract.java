@@ -18,7 +18,7 @@ public class WorkoutContract {
         public static final String TABLE_NAME_EXERCISES = "exercises";
         public static final String JOIN_TABLE = "workouts/exercises";
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_WORKOUT);
-        public static final Uri CONTENT_URI_EXERCISE = Uri.withAppendedPath(BASE_CONTENT_URI,TABLE_NAME_EXERCISES);
+        public static final Uri CONTENT_URI_EXERCISE = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_EXERCISE);
         public static final Uri JOIN_TABLE_URI = Uri.withAppendedPath(BASE_CONTENT_URI,JOIN_TABLE);
 
 
