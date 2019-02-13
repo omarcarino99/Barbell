@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class ExercisesListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -35,6 +36,15 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
         uri = intent.getData();
         intentValue = intent.getLongExtra("id", 0);
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ExercisesListActivity.this, AddWorkout.class);
+                String test = "sheep";
+                String anotherTest = "another test";
+                startActivity(intent);
+            }
+        });
 
         addExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
