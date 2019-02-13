@@ -33,6 +33,11 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
         Intent intent = getIntent();
         workoutId = intent.getLongExtra("value", 0);
 
+        uri = intent.getData();
+        if (uri != null) {
+            getLoaderManager().initLoader(0, null, this);
+        }
+
         exerciseNameET = findViewById(R.id.exercise_name_edit_text);
         weightET = findViewById(R.id.weight);
         repsET = findViewById(R.id.reps);
@@ -85,7 +90,17 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data.moveToFirst()) {
+            String exerciseName = data.getString(data.getColumnIndexOrThrow("exercise_name"));
+            String weight = data.getString(data.getColumnIndexOrThrow("weight"));
+            String reps = data.getString(data.getColumnIndexOrThrow("reps"));
+            String rpe = data.getString(data.getColumnIndexOrThrow("rpe"));
 
+            exerciseNameET.setText(exerciseName);
+            weightET.setText(weight);
+            repsET.setText(reps);
+            rpeET.setText(rpe);
+        }
     }
 
     @Override

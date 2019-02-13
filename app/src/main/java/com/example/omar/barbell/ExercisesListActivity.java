@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import static android.content.ContentUris.withAppendedId;
+
 public class ExercisesListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Uri uri;
@@ -40,8 +42,8 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ExercisesListActivity.this, AddWorkout.class);
-                String test = "sheep";
-                String anotherTest = "another test";
+                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, id);
+                intent.setData(uri);
                 startActivity(intent);
             }
         });
