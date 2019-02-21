@@ -1,6 +1,7 @@
 package com.example.omar.barbell;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -22,27 +23,33 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
     private EditText repsET;
     private EditText rpeET;
     private Button saveButton;
-    private Uri uri;
+    private Uri exerciseUri;
     private long workoutId;
+    private long exerciseId;
+    private String stringWorkoutId;
+    private String stringExerciseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercise);
 
-        Intent intent = getIntent();
-        workoutId = intent.getLongExtra("value", 0);
-
-        uri = intent.getData();
-        if (uri != null) {
-            getLoaderManager().initLoader(0, null, this);
-        }
-
         exerciseNameET = findViewById(R.id.exercise_name_edit_text);
         weightET = findViewById(R.id.weight);
         repsET = findViewById(R.id.reps);
         rpeET = findViewById(R.id.rpe);
         saveButton = findViewById(R.id.save_exercise_button);
+
+        Intent intent = getIntent();
+        workoutId = intent.getLongExtra("workoutId", 0);
+        exerciseId = intent.getLongExtra("exerciseId", 0);
+        stringWorkoutId = String.valueOf(workoutId);
+        stringExerciseId = String.valueOf(exerciseId);
+        exerciseUri = intent.getData();
+
+        if (exerciseUri != null) {
+            getLoaderManager().initLoader(0, null, this);
+        }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,16 +66,21 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
         String rpe = rpeET.getText().toString();
 
         ContentValues values = new ContentValues();
-        values.put(WorkoutContract.WorkoutEntry.EXERCISE_NAME,exerciseName);
-        values.put(WorkoutContract.WorkoutEntry.WEIGHT,weight);
-        values.put(WorkoutContract.WorkoutEntry.REPS,reps);
-        values.put(WorkoutContract.WorkoutEntry.RPE,rpe);
+        values.put(WorkoutContract.WorkoutEntry.EXERCISE_NAME, exerciseName);
+        values.put(WorkoutContract.WorkoutEntry.WEIGHT, weight);
+        values.put(WorkoutContract.WorkoutEntry.REPS, reps);
+        values.put(WorkoutContract.WorkoutEntry.RPE, rpe);
         values.put(WorkoutContract.WorkoutEntry.WORKOUT_ID, workoutId);
 
-        Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI_EXERCISE, values);
-        Intent intent = new Intent(AddExerciseActivity.this,ExercisesListActivity.class);
+        Intent intent = new Intent(AddExerciseActivity.this, ExercisesListActivity.class);
         Uri exerciseListUri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, workoutId);
         intent.setData(exerciseListUri);
+
+        if (exerciseUri == null) {
+            Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI_EXERCISE, values);
+        } else {
+            int rowsUpdated = getContentResolver().update(exerciseUri, values, null, null);
+        }
         startActivity(intent);
     }
 
@@ -76,14 +88,20 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projections = {
                 WorkoutContract.WorkoutEntry._ID,
+                WorkoutContract.WorkoutEntry.EXERCISE_NAME,
+                WorkoutContract.WorkoutEntry.WEIGHT,
+                WorkoutContract.WorkoutEntry.REPS,
+                WorkoutContract.WorkoutEntry.RPE,
+                WorkoutContract.WorkoutEntry.WORKOUT_ID
         };
 
+        String[] selectionArgs = new String[]{stringWorkoutId, stringExerciseId};
         return new CursorLoader(
                 this,
-                uri,
+                exerciseUri,
                 projections,
                 null,
-                null,
+                selectionArgs,
                 null
         );
     }

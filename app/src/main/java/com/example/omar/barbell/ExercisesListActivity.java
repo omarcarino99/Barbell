@@ -13,11 +13,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import static android.content.ContentUris.withAppendedId;
 
 public class ExercisesListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private WorkoutDbHelper dbHelper;
     private Uri uri;
     private ExerciseListAdapter adapter;
     private FloatingActionButton addExerciseButton;
@@ -28,26 +30,27 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercises_list);
+
         addExerciseButton = findViewById(R.id.add_exercise_button);
 
-        ListView list = findViewById(R.id.exercise_list);
-        adapter = new ExerciseListAdapter(this,null);
+        final ListView list = findViewById(R.id.exercise_list);
+        adapter = new ExerciseListAdapter(this, null);
         list.setAdapter(adapter);
 
-        intent = getIntent();
-        uri = intent.getData();
-        intentValue = intent.getLongExtra("id", 0);
+        getIntents();
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ExercisesListActivity.this, AddWorkout.class);
-                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, id);
+                Intent intent = new Intent(ExercisesListActivity.this, AddExerciseActivity.class);
+                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.CONTENT_URI_EXERCISE, id);
+                long idValue = adapter.getItemId(position);
+                intent.putExtra("exerciseId", idValue);
+                intent.putExtra("workoutId", intentValue);
                 intent.setData(uri);
                 startActivity(intent);
             }
         });
-
         addExerciseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +61,12 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
             }
         });
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    private void getIntents() {
+        intent = getIntent();
+        uri = intent.getData();
+        intentValue = intent.getLongExtra("id", 0);
     }
 
 
@@ -85,11 +94,13 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            adapter.swapCursor(data);
+        adapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
     }
+
+
 }

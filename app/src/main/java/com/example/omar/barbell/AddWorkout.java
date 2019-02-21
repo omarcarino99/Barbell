@@ -17,14 +17,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class AddWorkout extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class AddWorkout extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Uri workoutUri;
     private EditText workoutTitleET;
     private EditText workoutDateET;
     private Button saveWorkoutButton;
-    private int workoutId;
-    private ExerciseListAdapter adapter;
     private static final int EXISTING_WORKOUT_LOADER = 0;
 
     @Override
@@ -32,14 +30,15 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_workout);
 
+        workoutTitleET = (EditText) findViewById(R.id.workout_title_edit_text);
+        workoutDateET = (EditText) findViewById(R.id.workout_date_edit_text);
+        saveWorkoutButton = findViewById(R.id.save_workout_button);
+
         Intent intent = getIntent();
         workoutUri = intent.getData();
-        if (workoutUri != null){
-            getLoaderManager().initLoader(EXISTING_WORKOUT_LOADER,null,this);
+        if (workoutUri != null) {
+            getLoaderManager().initLoader(EXISTING_WORKOUT_LOADER, null, this);
         }
-        workoutTitleET =(EditText) findViewById(R.id.workout_title_edit_text);
-        workoutDateET =(EditText) findViewById(R.id.workout_date_edit_text);
-        saveWorkoutButton = findViewById(R.id.save_workout_button);
 
         saveWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,21 +47,21 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
             }
         });
 
-
     }
 
     private void saveWorkout() {
         String workoutTitle = workoutTitleET.getText().toString();
         String workoutDate = workoutDateET.getText().toString();
-        if (workoutTitle.isEmpty() || workoutDate.isEmpty()){
+
+        if (workoutTitle.isEmpty() || workoutDate.isEmpty()) {
             Toast.makeText(this, "Please fill in the missing areas", Toast.LENGTH_SHORT).show();
         }
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_TITLE,workoutTitle);
-        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_DATE,workoutDate);
-        Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI,contentValues);
-        Intent intent = new Intent(AddWorkout.this,MainActivity.class);
+        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_TITLE, workoutTitle);
+        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_DATE, workoutDate);
+        Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI, contentValues);
+        Intent intent = new Intent(AddWorkout.this, MainActivity.class);
         startActivity(intent);
     }
 
@@ -73,7 +72,6 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
                 WorkoutContract.WorkoutEntry.WORKOUT_TITLE,
                 WorkoutContract.WorkoutEntry.WORKOUT_DATE
         };
-
 
         return new CursorLoader(
                 this,
@@ -90,7 +88,6 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
         if (data.moveToFirst()) {
             String workoutTitileIndex = data.getString(data.getColumnIndexOrThrow("workout_title"));
             String workoutDate = data.getString(data.getColumnIndexOrThrow("workout_date"));
-
 
             workoutTitleET.setText(workoutTitileIndex);
             workoutDateET.setText(workoutDate);

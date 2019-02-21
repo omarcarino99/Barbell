@@ -14,14 +14,15 @@ public class WorkoutListAdapter extends CursorAdapter {
 
     Context mContext;
     Cursor mCursor;
+
     public WorkoutListAdapter(Context context, Cursor c) {
-        super(context, c,0);
+        super(context, c, 0);
         mContext = context;
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.workout_list_item,parent,false);
+        return LayoutInflater.from(context).inflate(R.layout.workout_list_item, parent, false);
     }
 
     @Override

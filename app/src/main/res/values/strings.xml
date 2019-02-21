@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Barbell</string>
+    <string name="MISSING_INPUT_MESSAGE">Missing input</string>
 </resources>

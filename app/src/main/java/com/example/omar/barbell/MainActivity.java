@@ -18,19 +18,21 @@ import static android.content.ContentUris.withAppendedId;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private WorkoutListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ListView workoutList = findViewById(R.id.workout_list);
-        adapter = new WorkoutListAdapter(this,null);
+
+        adapter = new WorkoutListAdapter(this, null);
         workoutList.setAdapter(adapter);
         workoutList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, ExercisesListActivity.class);
-                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.CONTENT_URI_EXERCISE, id);
+                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, id);
                 intent.putExtra("id", id);
                 intent.setData(uri);
                 startActivity(intent);
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,AddWorkout.class);
+                Intent intent = new Intent(MainActivity.this, AddWorkout.class);
                 startActivity(intent);
 
             }
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String [] projections ={
+        String[] projections = {
                 WorkoutContract.WorkoutEntry._ID,
                 WorkoutContract.WorkoutEntry.WORKOUT_TITLE,
                 WorkoutContract.WorkoutEntry.WORKOUT_DATE
