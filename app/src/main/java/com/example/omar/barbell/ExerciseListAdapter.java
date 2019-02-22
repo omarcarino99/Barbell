@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.example.omar.barbell.Database.WorkoutContract;
 
 public class ExerciseListAdapter extends CursorAdapter {
     private Context mContext;

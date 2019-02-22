@@ -1,4 +1,4 @@
-package com.example.omar.barbell;
+package com.example.omar.barbell.UI;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.example.omar.barbell.Database.WorkoutContract;
+import com.example.omar.barbell.R;
+import com.example.omar.barbell.WorkoutListAdapter;
 
 import static android.content.ContentUris.withAppendedId;
 

@@ -1,7 +1,6 @@
-package com.example.omar.barbell;
+package com.example.omar.barbell.UI;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -13,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.omar.barbell.Database.WorkoutContract;
+import com.example.omar.barbell.R;
 
 import static android.content.ContentUris.withAppendedId;
 
@@ -41,14 +43,16 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
         saveButton = findViewById(R.id.save_exercise_button);
 
         Intent intent = getIntent();
-        workoutId = intent.getLongExtra("workoutId", 0);
-        exerciseId = intent.getLongExtra("exerciseId", 0);
+        exerciseUri = intent.getData();
         stringWorkoutId = String.valueOf(workoutId);
         stringExerciseId = String.valueOf(exerciseId);
-        exerciseUri = intent.getData();
 
         if (exerciseUri != null) {
+            workoutId = intent.getLongExtra("workoutId", 0);
+            exerciseId = intent.getLongExtra("exerciseId", 0);
             getLoaderManager().initLoader(0, null, this);
+        } else {
+            workoutId = intent.getLongExtra("workoutIdValue", 0);
         }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +82,10 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
 
         if (exerciseUri == null) {
             Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI_EXERCISE, values);
+            intent.putExtra("id", workoutId);
         } else {
             int rowsUpdated = getContentResolver().update(exerciseUri, values, null, null);
+            intent.putExtra("id", workoutId);
         }
         startActivity(intent);
     }

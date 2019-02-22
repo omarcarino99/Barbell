@@ -1,4 +1,4 @@
-package com.example.omar.barbell;
+package com.example.omar.barbell.UI;
 
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -9,13 +9,14 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import com.example.omar.barbell.Database.WorkoutContract;
+import com.example.omar.barbell.R;
 
 public class AddWorkout extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 

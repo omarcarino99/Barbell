@@ -1,7 +1,6 @@
-package com.example.omar.barbell;
+package com.example.omar.barbell.UI;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -13,7 +12,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
+
+import com.example.omar.barbell.Database.WorkoutContract;
+import com.example.omar.barbell.Database.WorkoutDbHelper;
+import com.example.omar.barbell.ExerciseListAdapter;
+import com.example.omar.barbell.R;
 
 import static android.content.ContentUris.withAppendedId;
 
@@ -45,8 +48,10 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
                 Intent intent = new Intent(ExercisesListActivity.this, AddExerciseActivity.class);
                 Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.CONTENT_URI_EXERCISE, id);
                 long idValue = adapter.getItemId(position);
-                intent.putExtra("exerciseId", idValue);
+
                 intent.putExtra("workoutId", intentValue);
+                intent.putExtra("exerciseId", idValue);
+
                 intent.setData(uri);
                 startActivity(intent);
             }
@@ -55,8 +60,7 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
             @Override
             public void onClick(View v) {
                 Intent exerciseListIntent = new Intent(ExercisesListActivity.this, AddExerciseActivity.class);
-                long value = intentValue;
-                exerciseListIntent.putExtra("value", value);
+                exerciseListIntent.putExtra("workoutIdValue", intentValue);
                 startActivity(exerciseListIntent);
             }
         });

@@ -1,4 +1,4 @@
-package com.example.omar.barbell;
+package com.example.omar.barbell.Database;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

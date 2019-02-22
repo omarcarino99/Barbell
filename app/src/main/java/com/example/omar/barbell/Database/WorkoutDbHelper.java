@@ -1,7 +1,6 @@
-package com.example.omar.barbell;
+package com.example.omar.barbell.Database;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
