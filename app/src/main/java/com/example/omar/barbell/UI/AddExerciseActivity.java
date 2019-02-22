@@ -44,13 +44,14 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
 
         Intent intent = getIntent();
         exerciseUri = intent.getData();
-        stringWorkoutId = String.valueOf(workoutId);
-        stringExerciseId = String.valueOf(exerciseId);
-
+        
         if (exerciseUri != null) {
             workoutId = intent.getLongExtra("workoutId", 0);
             exerciseId = intent.getLongExtra("exerciseId", 0);
+            stringWorkoutId = String.valueOf(workoutId);
+            stringExerciseId = String.valueOf(exerciseId);
             getLoaderManager().initLoader(0, null, this);
+
         } else {
             workoutId = intent.getLongExtra("workoutIdValue", 0);
         }
