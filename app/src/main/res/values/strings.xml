@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Barbell</string>
     <string name="MISSING_INPUT_MESSAGE">Missing input</string>
+    <string name="delete_failed_message">Delete Failed</string>
+    <string name="delete_button_label">Delete</string>
 </resources>

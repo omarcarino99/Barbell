@@ -74,7 +74,6 @@ public class WorkoutProvider extends ContentProvider {
                         " WHERE workouts._id=?";
                 cursor = db.rawQuery(QUEREY, selectionArgs);
                 break;
-
             default:
                 throw new IllegalArgumentException("Failed to retrieve" + uri);
         }
@@ -132,8 +131,27 @@ public class WorkoutProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        int rowsDeleted;
 
-        return 0;
+        final int match = uriMatcher.match(uri);
+        switch (match) {
+            case WORKOUT_ID:
+                selection = WorkoutContract.WorkoutEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(WorkoutContract.WorkoutEntry.TABLE_NAME_WORKOUT, selection, selectionArgs);
+                break;
+            case EXERCISE_ID:
+                selection = WorkoutContract.WorkoutEntry._ID + "=?";
+                rowsDeleted = database.delete(WorkoutContract.WorkoutEntry.TABLE_NAME_EXERCISES, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException(getContext().getString(R.string.delete_failed_message) + uri);
+        }
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     @Override
@@ -144,6 +162,7 @@ public class WorkoutProvider extends ContentProvider {
                 selection = WorkoutContract.WorkoutEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateExercise(uri, values, selection, selectionArgs);
+
         }
         return 0;
     }

@@ -8,12 +8,16 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.omar.barbell.Database.WorkoutContract;
+import com.example.omar.barbell.ExerciseListAdapter;
 import com.example.omar.barbell.R;
 
 import static android.content.ContentUris.withAppendedId;
@@ -88,6 +92,32 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
             int rowsUpdated = getContentResolver().update(exerciseUri, values, null, null);
             intent.putExtra("id", workoutId);
         }
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_menu_button:
+                deleteExercise();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteExercise() {
+        int rowsDeleted = 0;
+        String[] selectionArgs = new String[]{stringExerciseId};
+        rowsDeleted = getContentResolver().delete(exerciseUri, null, selectionArgs);
+        Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, workoutId);
+        Intent intent = new Intent(AddExerciseActivity.this, ExercisesListActivity.class);
+        intent.setData(uri);
         startActivity(intent);
     }
 
