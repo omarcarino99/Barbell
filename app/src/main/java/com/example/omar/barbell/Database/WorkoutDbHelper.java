@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class WorkoutDbHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "workout.db";
-    public static final int VERSION_NUMBER = 3;
+    public static final int VERSION_NUMBER = 5;
 
 
     public WorkoutDbHelper(Context context) {
@@ -31,7 +31,8 @@ public class WorkoutDbHelper extends SQLiteOpenHelper {
                 + "FOREIGN KEY" + "(" + WorkoutContract.WorkoutEntry.WORKOUT_ID + ")" + " REFERENCES "
                 + WorkoutContract.WorkoutEntry.TABLE_NAME_WORKOUT
                 + "("
-                + (WorkoutContract.WorkoutEntry._ID) + ")" + ")";
+                + (WorkoutContract.WorkoutEntry._ID) + ")"
+                + "ON DELETE CASCADE" + ")";
         db.execSQL(CREATE_TABLE_WORKOUTS);
         db.execSQL(CREATE_TABLE_EXERCISES);
     }
@@ -39,6 +40,14 @@ public class WorkoutDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
     }
 }
 

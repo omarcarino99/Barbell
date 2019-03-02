@@ -8,29 +8,25 @@
 
     <EditText
         android:id="@+id/exercise_name_edit_text"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        style="@style/AddExerciseEditText"
         android:hint="Exercise Name"/>
     <EditText
         android:id="@+id/weight"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        style="@style/AddExerciseEditText"
         android:layout_below="@+id/exercise_name_edit_text"
         android:hint="Weight"/>
     <EditText
         android:id="@+id/reps"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        style="@style/AddExerciseEditText"
         android:layout_below="@+id/weight"
         android:hint="reps" />
     <EditText
         android:id="@+id/rpe"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        style="@style/AddExerciseEditText"
         android:layout_below="@+id/reps"
         android:hint="rpe"/>
     <Button

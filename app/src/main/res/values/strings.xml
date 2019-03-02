@@ -3,4 +3,6 @@
     <string name="MISSING_INPUT_MESSAGE">Missing input</string>
     <string name="delete_failed_message">Delete Failed</string>
     <string name="delete_button_label">Delete</string>
+    <string name="empty_view_label">No Workouts to Display</string>
+    <string name="empty_view_label_exercises">Please Add Exercises</string>
 </resources>

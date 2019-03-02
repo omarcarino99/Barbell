@@ -78,8 +78,6 @@ public class WorkoutProvider extends ContentProvider {
                 throw new IllegalArgumentException("Failed to retrieve" + uri);
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
-        int rowcount = cursor.getCount();
-        Log.d("ROWCOUNT", "Number of rows = " + String.valueOf(rowcount));
         return cursor;
     }
 
@@ -162,7 +160,6 @@ public class WorkoutProvider extends ContentProvider {
                 selection = WorkoutContract.WorkoutEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateExercise(uri, values, selection, selectionArgs);
-
         }
         return 0;
     }

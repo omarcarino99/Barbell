@@ -7,6 +7,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,7 +26,6 @@ import static android.content.ContentUris.withAppendedId;
 
 public class ExercisesListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private WorkoutDbHelper dbHelper;
     private Uri uri;
     private ExerciseListAdapter adapter;
     private FloatingActionButton addExerciseButton;
@@ -37,11 +37,18 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercises_list);
 
-        addExerciseButton = findViewById(R.id.add_exercise_button);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final ListView list = findViewById(R.id.exercise_list);
+
+        View emptyView = findViewById(R.id.empty_view);
+        list.setEmptyView(emptyView);
+
         adapter = new ExerciseListAdapter(this, null);
         list.setAdapter(adapter);
+
+        addExerciseButton = findViewById(R.id.add_exercise_button);
 
         getIntents();
 
@@ -70,12 +77,33 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
         getLoaderManager().initLoader(0, null, this);
     }
 
+    private void deleteWorkout() {
+        Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.CONTENT_URI, intentValue);
+        int rowsDeleted = 0;
+        rowsDeleted = getContentResolver().delete(uri, null, null);
+        Intent intent = new Intent(ExercisesListActivity.this, MainActivity.class);
+        intent.setData(uri);
+        startActivity(intent);
+    }
+
     private void getIntents() {
         intent = getIntent();
         uri = intent.getData();
         intentValue = intent.getLongExtra("id", 0);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(ExercisesListActivity.this);
+                return true;
+            case R.id.delete_menu_button:
+                deleteWorkout();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -109,5 +137,9 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
         adapter.swapCursor(null);
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
 }

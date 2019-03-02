@@ -1,6 +1,7 @@
 package com.example.omar.barbell.UI;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -18,12 +19,19 @@ import android.widget.Toast;
 import com.example.omar.barbell.Database.WorkoutContract;
 import com.example.omar.barbell.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import static android.content.ContentUris.withAppendedId;
+
 public class AddWorkout extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private Uri workoutUri;
     private EditText workoutTitleET;
     private EditText workoutDateET;
     private Button saveWorkoutButton;
+    private long id;
     private static final int EXISTING_WORKOUT_LOADER = 0;
 
     @Override
@@ -32,7 +40,6 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
         setContentView(R.layout.activity_add_workout);
 
         workoutTitleET = (EditText) findViewById(R.id.workout_title_edit_text);
-        workoutDateET = (EditText) findViewById(R.id.workout_date_edit_text);
         saveWorkoutButton = findViewById(R.id.save_workout_button);
 
         Intent intent = getIntent();
@@ -52,17 +59,24 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
 
     private void saveWorkout() {
         String workoutTitle = workoutTitleET.getText().toString();
-        String workoutDate = workoutDateET.getText().toString();
+        Date calendar = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = dateFormat.format(calendar);
 
-        if (workoutTitle.isEmpty() || workoutDate.isEmpty()) {
+        if (workoutTitle.isEmpty()) {
             Toast.makeText(this, "Please fill in the missing areas", Toast.LENGTH_SHORT).show();
         }
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_TITLE, workoutTitle);
-        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_DATE, workoutDate);
+        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_DATE, formattedDate);
         Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI, contentValues);
-        Intent intent = new Intent(AddWorkout.this, MainActivity.class);
+        id = ContentUris.parseId(uri);
+        Uri newUri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, id);
+
+        Intent intent = new Intent(AddWorkout.this, ExercisesListActivity.class);
+        intent.putExtra("id", id);
+        intent.setData(newUri);
         startActivity(intent);
     }
 
@@ -86,13 +100,7 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data.moveToFirst()) {
-            String workoutTitileIndex = data.getString(data.getColumnIndexOrThrow("workout_title"));
-            String workoutDate = data.getString(data.getColumnIndexOrThrow("workout_date"));
-
-            workoutTitleET.setText(workoutTitileIndex);
-            workoutDateET.setText(workoutDate);
-        }
+        id = data.getInt(data.getColumnIndexOrThrow(WorkoutContract.WorkoutEntry._ID));
     }
 
     @Override

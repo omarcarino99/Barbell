@@ -28,10 +28,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        View emptyView = findViewById(R.id.empty_view);
         ListView workoutList = findViewById(R.id.workout_list);
-
+        workoutList.setEmptyView(emptyView);
         adapter = new WorkoutListAdapter(this, null);
         workoutList.setAdapter(adapter);
+
         workoutList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

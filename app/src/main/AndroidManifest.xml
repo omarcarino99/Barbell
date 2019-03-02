@@ -22,9 +22,15 @@
             android:authorities="com.example.omar.barbell"
             android:exported="false" />
 
-        <activity android:name=".UI.AddWorkout" />
-        <activity android:name=".UI.AddExerciseActivity" />
-        <activity android:name=".UI.ExercisesListActivity" />
+        <activity
+            android:name=".UI.AddWorkout"
+            android:parentActivityName=".UI.MainActivity" />
+        <activity
+            android:name=".UI.AddExerciseActivity"
+            android:parentActivityName=".UI.ExercisesListActivity" />
+        <activity
+            android:name=".UI.ExercisesListActivity"
+            android:parentActivityName=".UI.MainActivity" />
     </application>
 
 </manifest>
