@@ -160,8 +160,32 @@ public class WorkoutProvider extends ContentProvider {
                 selection = WorkoutContract.WorkoutEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateExercise(uri, values, selection, selectionArgs);
+            case WORKOUT_ID:
+                selection = WorkoutContract.WorkoutEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateWorkout(uri, values, selection, selectionArgs);
         }
         return 0;
+    }
+
+    private int updateWorkout(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (values.containsKey(WorkoutContract.WorkoutEntry.WORKOUT_TITLE)) {
+            String workoutTitle = values.getAsString(WorkoutContract.WorkoutEntry.WORKOUT_TITLE);
+            if (workoutTitle == null) {
+                throw new IllegalArgumentException("Missing Input");
+            }
+        }
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int rowsUpdated = db.update(WorkoutContract.WorkoutEntry.TABLE_NAME_WORKOUT, values, selection, selectionArgs);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
+
     }
 
     private int updateExercise(Uri uri, ContentValues values, String selection, String[] selectionArgs) {

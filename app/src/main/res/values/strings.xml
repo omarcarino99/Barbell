@@ -5,4 +5,6 @@
     <string name="delete_button_label">Delete</string>
     <string name="empty_view_label">No Workouts to Display</string>
     <string name="empty_view_label_exercises">Please Add Exercises</string>
+    <string name="edit_button_name">Edit</string>
+    <string name="update_button_label">Update</string>
 </resources>

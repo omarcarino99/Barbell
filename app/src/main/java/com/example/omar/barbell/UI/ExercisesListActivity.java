@@ -11,14 +11,12 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.omar.barbell.Database.WorkoutContract;
-import com.example.omar.barbell.Database.WorkoutDbHelper;
 import com.example.omar.barbell.ExerciseListAdapter;
 import com.example.omar.barbell.R;
 
@@ -29,7 +27,7 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
     private Uri uri;
     private ExerciseListAdapter adapter;
     private FloatingActionButton addExerciseButton;
-    private long intentValue;
+    public long intentValue;
     private Intent intent;
 
     @Override
@@ -101,6 +99,12 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
             case R.id.delete_menu_button:
                 deleteWorkout();
                 return true;
+            case R.id.edit_button:
+                Intent intent = new Intent(ExercisesListActivity.this, AddWorkout.class);
+                Uri uri = withAppendedId(WorkoutContract.WorkoutEntry.CONTENT_URI, intentValue);
+                intent.putExtra("id", intentValue);
+                intent.setData(uri);
+                startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -31,7 +31,7 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
     private EditText workoutTitleET;
     private EditText workoutDateET;
     private Button saveWorkoutButton;
-    private long id;
+    public long id;
     private static final int EXISTING_WORKOUT_LOADER = 0;
 
     @Override
@@ -45,16 +45,15 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
         Intent intent = getIntent();
         workoutUri = intent.getData();
         if (workoutUri != null) {
+            saveWorkoutButton.setText(R.string.update_button_label);
             getLoaderManager().initLoader(EXISTING_WORKOUT_LOADER, null, this);
         }
-
         saveWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveWorkout();
             }
         });
-
     }
 
     private void saveWorkout() {
@@ -68,15 +67,27 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
         }
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_TITLE, workoutTitle);
-        contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_DATE, formattedDate);
-        Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI, contentValues);
-        id = ContentUris.parseId(uri);
-        Uri newUri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, id);
 
+        if (workoutUri == null) {
+            contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_TITLE, workoutTitle);
+            contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_DATE, formattedDate);
+        } else {
+            contentValues.put(WorkoutContract.WorkoutEntry.WORKOUT_TITLE, workoutTitle);
+        }
+
+        long workoutId = ContentUris.parseId(workoutUri);
+        Uri joinTableUri = withAppendedId(WorkoutContract.WorkoutEntry.JOIN_TABLE_URI, workoutId);
         Intent intent = new Intent(AddWorkout.this, ExercisesListActivity.class);
-        intent.putExtra("id", id);
-        intent.setData(newUri);
+
+        if (workoutUri == null) {
+            Uri uri = getContentResolver().insert(WorkoutContract.WorkoutEntry.CONTENT_URI, contentValues);
+            id = ContentUris.parseId(uri);
+            intent.putExtra("id", id);
+        } else {
+            int rowsUpdated = getContentResolver().update(workoutUri, contentValues, null, null);
+            intent.putExtra("id", workoutId);
+        }
+        intent.setData(joinTableUri);
         startActivity(intent);
     }
 
@@ -100,13 +111,15 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        id = data.getInt(data.getColumnIndexOrThrow(WorkoutContract.WorkoutEntry._ID));
+        if (data.moveToFirst()) {
+            String exerciseName = data.getString(data.getColumnIndexOrThrow(WorkoutContract.WorkoutEntry.WORKOUT_TITLE));
+            workoutTitleET.setText(exerciseName);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         workoutTitleET.setText("");
-        workoutDateET.setText("");
     }
 }
 

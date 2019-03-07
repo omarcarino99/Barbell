@@ -12,7 +12,6 @@ public class WorkoutContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_WORKOUT = "workout";
     public static final String PATH_EXERCISE = "exercise";
-    public static final String PATH_WORKOUT_EXERCISE = "workout_exercises";
 
     public static final class WorkoutEntry implements BaseColumns {
         public static final String TABLE_NAME_WORKOUT = "workouts";
