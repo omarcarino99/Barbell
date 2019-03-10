@@ -28,6 +28,7 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
     private ExerciseListAdapter adapter;
     private FloatingActionButton addExerciseButton;
     public long intentValue;
+    private String workoutName;
     private Intent intent;
 
     @Override
@@ -118,7 +119,8 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
                 WorkoutContract.WorkoutEntry.WEIGHT,
                 WorkoutContract.WorkoutEntry.REPS,
                 WorkoutContract.WorkoutEntry.RPE,
-                WorkoutContract.WorkoutEntry.WORKOUT_ID
+                WorkoutContract.WorkoutEntry.WORKOUT_ID,
+                WorkoutContract.WorkoutEntry.WORKOUT_TITLE
         };
 
         return new CursorLoader(
@@ -134,6 +136,12 @@ public class ExercisesListActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+        if (data.moveToFirst()) {
+            workoutName = data.getString(data.getColumnIndexOrThrow(WorkoutContract.WorkoutEntry.WORKOUT_TITLE));
+            getSupportActionBar().setTitle(workoutName);
+        }
+
+
     }
 
     @Override

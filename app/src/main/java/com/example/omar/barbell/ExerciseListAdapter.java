@@ -28,7 +28,6 @@ public class ExerciseListAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         mCursor = cursor;
 
-
         TextView exercise = view.findViewById(R.id.exercise_name);
         TextView weight = view.findViewById(R.id.exercise_weight);
         TextView reps = view.findViewById(R.id.exercise_reps);
@@ -38,7 +37,6 @@ public class ExerciseListAdapter extends CursorAdapter {
         String weightIndex = cursor.getString(cursor.getColumnIndexOrThrow("weight"));
         String repsIndex = cursor.getString(cursor.getColumnIndexOrThrow("reps"));
         String rpeIndex = cursor.getString(cursor.getColumnIndexOrThrow("rpe"));
-
 
         exercise.setText(exerciseIndex);
         weight.setText(weightIndex);

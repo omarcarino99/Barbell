@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,8 +30,8 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
 
     private Uri workoutUri;
     private EditText workoutTitleET;
-    private EditText workoutDateET;
     private Button saveWorkoutButton;
+    private String workoutName;
     public long id;
     private static final int EXISTING_WORKOUT_LOADER = 0;
 
@@ -38,6 +39,9 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_workout);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         workoutTitleET = (EditText) findViewById(R.id.workout_title_edit_text);
         saveWorkoutButton = findViewById(R.id.save_workout_button);
@@ -92,6 +96,17 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projections = {
                 BaseColumns._ID,
@@ -112,9 +127,11 @@ public class AddWorkout extends AppCompatActivity implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToFirst()) {
-            String exerciseName = data.getString(data.getColumnIndexOrThrow(WorkoutContract.WorkoutEntry.WORKOUT_TITLE));
-            workoutTitleET.setText(exerciseName);
+            workoutName = data.getString(data.getColumnIndexOrThrow(WorkoutContract.WorkoutEntry.WORKOUT_TITLE));
+            workoutTitleET.setText(workoutName);
+            getSupportActionBar().setTitle(workoutName);
         }
+
     }
 
     @Override

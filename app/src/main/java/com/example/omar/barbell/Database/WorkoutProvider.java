@@ -67,7 +67,8 @@ public class WorkoutProvider extends ContentProvider {
                         "exercise_name," +
                         "weight," +
                         "reps," +
-                        "rpe" +
+                        "rpe," +
+                        "workouts.workout_title" +
                         " FROM " +
                         "exercises" +
                         " INNER JOIN workouts ON workouts._id = exercises.workout_id" +

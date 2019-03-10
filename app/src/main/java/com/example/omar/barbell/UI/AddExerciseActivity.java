@@ -1,5 +1,6 @@
 package com.example.omar.barbell.UI;
 
+import android.app.ActionBar;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -39,6 +40,10 @@ public class AddExerciseActivity extends AppCompatActivity implements LoaderMana
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercise);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         exerciseNameET = findViewById(R.id.exercise_name_edit_text);
         weightET = findViewById(R.id.weight);
